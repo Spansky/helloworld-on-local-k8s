@@ -6,13 +6,24 @@ metadata:
     kubernetes.io/ingress.class: "traefik"
 spec:
   rules:
-  - http:
+  - host: 8ls.co
+    http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
             name: hello-world
+            port:
+              number: 80
+  - host: blog.8ls.co
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: blog 
             port:
               number: 80
 
@@ -27,6 +38,18 @@ spec:
       protocol: TCP
   selector:
     app: hello-world
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: blog 
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+  selector:
+    app: blog 
 
 ---
 apiVersion: apps/v1
@@ -55,3 +78,30 @@ spec:
       - name: hello-world-volume
         configMap:
           name: hello-world
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog-nginx
+spec:
+  selector:
+    matchLabels:
+      app: blog 
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: blog 
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: blog-volume
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: blog-volume
+        configMap:
+          name: blog 
