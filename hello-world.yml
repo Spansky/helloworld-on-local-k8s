@@ -117,7 +117,7 @@ spec:
     spec:
       containers:
       - name: blog
-        image: leon122/blog:kube-stage
+        image: ghcr.io/spansky/helloworld-on-local-k8s:develop
         imagePullPolicy: Always
         ports:
         - containerPort: 80
