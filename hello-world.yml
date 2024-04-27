@@ -90,6 +90,7 @@ spec:
       containers:
       - name: nginx
         image: nginx
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
         volumeMounts:
@@ -115,14 +116,17 @@ spec:
         app: blog 
     spec:
       containers:
-      - name: nginx
-        image: nginx
+      - name: blog
+        image: leon122/blog:kube-stage
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
-        volumeMounts:
-        - name: blog-volume
-          mountPath: /usr/share/nginx/html
-      volumes:
-      - name: blog-volume
-        configMap:
-          name: blog 
+          #        volumeMounts:
+          #- name: blog-volume
+          #mountPath: /usr/share/nginx/html
+          #volumes:
+          #- name: blog-volume
+          #configMap:
+          #name: blog 
+      imagePullSecrets:
+      - name: mysecretname
