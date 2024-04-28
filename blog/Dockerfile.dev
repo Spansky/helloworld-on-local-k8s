@@ -1,0 +1,16 @@
+# Use a base image with a web server installed, such as Nginx
+FROM node:14
+
+# Copy the custom Nginx configuration file
+WORKDIR /html
+
+# Copy the index.html file from your local machine to the workdir 
+COPY ./html/index.html . 
+
+RUN npm install -g browser-sync
+
+# Expose the port BrowserSync will use
+EXPOSE 3000
+EXPOSE 3001
+
+CMD ["browser-sync", "start", "--server", "--files", ".", "--no-ui", "--open", "false", "--port", "3000", "--reload-delay", "1000"]
